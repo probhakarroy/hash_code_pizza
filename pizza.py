@@ -7,30 +7,11 @@ def knapsack(n, C) :
         for j in range(C+1) :
             if i == 0 or j == 0 :
                 memo[i][j] = 0
-                memo.flush()
             elif j < weights[i] :
                 memo[i][j] = memo[i-1][j]
-                memo.flush()
             else :
                 memo[i][j] = max(memo[i-1][j], weights[i] + memo[i-1][j-weights[i]])
-                memo.flush()
 
-
-# def knapsack(n, C) :
-#     global memo
-    
-#     if memo[n][C] != 0 :
-#         return memo[n][C]
-#     elif n < 0  or C <= 0 :
-#         result = 0
-#     elif weights[n] > C :
-#         result = knapsack(n-1, C)
-#     else :
-#         result = max(knapsack(n-1, C), weights[n] + knapsack(n-1, C-weights[n]))
-    
-#     memo[n][C] = result
-#     memo.flush()
-#     return result
 
 def backtrace(n, C) :
     l = []
