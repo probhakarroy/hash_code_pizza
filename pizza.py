@@ -1,4 +1,6 @@
 #!./env/bin/python
+import numpy as np
+
 def knapsack(n, C) :
     global memo
     
@@ -12,6 +14,7 @@ def knapsack(n, C) :
         result = max(knapsack(n-1, C), weights[n] + knapsack(n-1, C-weights[n]))
     
     memo[n][C] = result
+    memo.flush()
     return result
 
 def backtrace(n, C) :
@@ -33,7 +36,7 @@ if __name__ == "__main__":
     C, n = [int(i) for i in input().split(' ')]
     weights = [int(i)  for i in input().split(' ')]    
     
-    memo = [[0 for i in range(C + 1)] for j in range(n + 1)]
+    memo = np.memmap('temp', mode = 'w+', shape = (n+1, C+1))
     weights.insert(0, 0)
 
     knapsack(n, C)
