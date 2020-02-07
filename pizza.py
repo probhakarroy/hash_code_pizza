@@ -4,6 +4,7 @@ import numpy as np
 def knapsack(n, C) :
     global memo
     for i in range(n+1) :
+        print('Matrix Creation Progress : {}/{}'.format(i, n), end='\r')
         for j in range(C+1) :
             if i == 0 or j == 0 :
                 memo[i][j] = 0
@@ -36,6 +37,7 @@ if __name__ == "__main__":
     weights.insert(0, 0)
 
     knapsack(n, C)
+    print()
     sol = backtrace(n, C)
     print(len(sol))
     [print(i, end = ' ') for i in sol]
