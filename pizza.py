@@ -1,17 +1,15 @@
 #!./env/bin/python
-import numpy as np
+import h5py
 
 def knapsack(n, C) :
     global memo
-    for i in range(n+1) :
+    for i in range(1, n+1) :
         print('Matrix Creation Progress : {}/{}'.format(i, n), end='\r')
-        for j in range(C+1) :
-            if i == 0 or j == 0 :
-                memo[i][j] = 0
-            elif j < weights[i] :
-                memo[i][j] = memo[i-1][j]
+        for j in range(1, C+1) :
+            if j < weights[i] :
+                memo[i, j] = memo[i-1, j]
             else :
-                memo[i][j] = max(memo[i-1][j], weights[i] + memo[i-1][j-weights[i]])
+                memo[i, j] = max(memo[i-1, j], weights[i] + memo[i-1, j-weights[i]])
 
 
 def backtrace(n, C) :
@@ -19,7 +17,7 @@ def backtrace(n, C) :
     i, j = n, C
 
     while i >= 0 and j >= 0 :
-        if memo[i][j] != memo[i-1][j] :
+        if memo[i, j] != memo[i-1, j] :
             l.append(i-1)
             j -= weights[i]
             i -= 1
@@ -33,7 +31,8 @@ if __name__ == "__main__":
     C, n = [int(i) for i in input().split(' ')]
     weights = [int(i)  for i in input().split(' ')]    
     
-    memo = np.memmap('temp', mode = 'w+', shape = (n+1, C+1))
+    fo = h5py.File('temp.hdf5', 'a')
+    memo = fo.create_dataset('matrix', (n+1, C+1), chunks = True, dtype = 'i')
     weights.insert(0, 0)
 
     knapsack(n, C)
